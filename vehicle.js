@@ -30,20 +30,25 @@ class Vehicle {
         this.position.y = (this.position.y + height) % height;
     }
 
+    avoidBorder(){
+
+    }
+
     display() {
-        noStroke()
-        fill(50, this.health, 0);
+        
         push();
         translate(this.position.x, this.position.y);
         rotate(this.velocity.heading());
-        triangle(10, 0, -8, 5, -8, -5);
 
-        //Debugging
         if (debuggingElements.showVehicleVelocity.checked()){
             stroke('#CD5C5C');
-            line(0, 0, map(this.velocity.mag(), 0, sqrt(2)*this.maxSpeed, 0, 100), 0);
+            strokeWeight(2);
+            line(10, 0, 10+map(this.velocity.mag(), 0, sqrt(2)*this.maxSpeed, 0, 50), 0);
         }
-        //End Debugging
+        
+        noStroke()
+        fill(50, this.health, 0);
+        triangle(10, 0, -8, 5, -8, -5);
 
         pop();
     }
