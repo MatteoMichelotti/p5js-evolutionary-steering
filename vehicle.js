@@ -1,7 +1,7 @@
 class Vehicle {
     constructor(x, y){
         this.maxSpeed = 3;
-        this.maxSteerForce = 5;
+        this.maxSteerForce = 0.5;
 
         this.health = 255;
 
@@ -31,11 +31,20 @@ class Vehicle {
     }
 
     display() {
+        noStroke()
         fill(50, this.health, 0);
         push();
         translate(this.position.x, this.position.y);
         rotate(this.velocity.heading());
         triangle(10, 0, -8, 5, -8, -5);
+
+        //Debugging
+        if (debuggingElements.showVehicleVelocity.checked()){
+            stroke('#CD5C5C');
+            line(0, 0, map(this.velocity.mag(), 0, sqrt(2)*this.maxSpeed, 0, 100), 0);
+        }
+        //End Debugging
+
         pop();
     }
 }
