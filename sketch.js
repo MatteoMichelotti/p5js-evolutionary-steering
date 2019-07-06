@@ -6,9 +6,9 @@ const debuggingElements = { };
 function setup(){
     createCanvas(1200, 600);
 
-    debuggingElements.showVehicleVelocity = createCheckbox("Show vehicle velocity");
-    debuggingElements.showOuterEdge = createCheckbox("Show outer edge");
-    debuggingElements.outerEdgeWidth = createSlider(20, 100, 30)
+    debuggingElements.showVehicleVelocity = createCheckbox("Show vehicle velocity", true);
+    debuggingElements.showOuterEdge = createCheckbox("Show outer edge", true);
+    debuggingElements.outerEdgeWidth = createSlider(20, 100, 40)
 
     for (let i=0; i<vehicles_number; i++){
         vehicles.push(new Vehicle(random(width), random(height)));

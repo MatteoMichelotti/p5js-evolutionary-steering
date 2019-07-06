@@ -1,17 +1,12 @@
 class Vehicle {
     constructor(x, y){
-        this.maxSpeed = 3;
-        this.maxSteerForce = 0.2;
+        this.maxSpeed = 5;
+        this.maxSteerForce = random(0.3, 0.6);
 
         this.health = 255;
 
         this.position = createVector(x, y);
-        
-        this.velocity = createVector(
-            random(-this.maxSpeed, this.maxSpeed),
-            random(-this.maxSpeed, this.maxSpeed)
-        );
-        
+        this.velocity = p5.Vector.random2D().setMag(random(this.maxSpeed));
         this.acceleration = createVector(0, 0);
     }
 
