@@ -28,7 +28,7 @@ function draw(){
 
     vehicles.forEach(v => {
         v.update();
-        v.wrap();
+        v.avoidEdge();
         v.display();
     });
 }

@@ -1,7 +1,7 @@
 class Vehicle {
     constructor(x, y){
         this.maxSpeed = 3;
-        this.maxSteerForce = 0.5;
+        this.maxSteerForce = 0.2;
 
         this.health = 255;
 
@@ -30,9 +30,33 @@ class Vehicle {
         this.position.y = (this.position.y + height) % height;
     }
 
-    avoidBorder(){
+    avoidEdge(){
+        const edge = debuggingElements.outerEdgeWidth.value();
+        var desired = null;
 
-    }
+        if (this.position.x < edge){
+            desired = createVector(this.maxSpeed, this.velocity.y);
+        }
+
+        if (this.position.x > width-edge){
+            desired = createVector(-this.maxSpeed, this.velocity.y);
+        }
+
+        if (this.position.y < edge){
+            desired = createVector(this.velocity.x, this.maxSpeed);
+        }
+
+        if (this.position.y > height-edge){
+            desired = createVector(this.velocity.x, -this.maxSpeed);
+        }
+
+        if (desired !== null){
+            desired.setMag(this.maxSpeed);
+            var steer = p5.Vector.sub(desired, this.velocity);
+            steer.limit(this.maxSteerForce);
+            this.applyForce(steer);
+        }
+    };
 
     display() {
         
