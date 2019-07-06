@@ -54,6 +54,8 @@ class Vehicle {
     };
 
     seek(target){
+        if (!target) return;
+        
         const desired = p5.Vector.sub(target.position, this.position);
         
         desired.mag() < target.radius
