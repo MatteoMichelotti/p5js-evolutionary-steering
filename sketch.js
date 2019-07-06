@@ -1,8 +1,8 @@
 const vehicles = [];
-const vehicles_number = 1;
+const vehicles_number = 10;
 
 let food = null;
-const food_number = 100;
+const food_number = 50;
 const eat_distance = 5;
 
 const debuggingElements = { };

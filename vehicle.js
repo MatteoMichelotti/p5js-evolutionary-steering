@@ -1,12 +1,16 @@
 class Vehicle {
     constructor(x, y){
+        this.MIN_SPEED = 0.5;
+        this.MAX_SPEED = 5;
+
         this.maxSpeed = 5;
         this.maxSteerForce = 0.5;
 
         this.health = 1;
+        this.dead = false;
 
         this.position = createVector(x, y);
-        this.velocity = p5.Vector.random2D().setMag(random(this.maxSpeed));
+        this.velocity = p5.Vector.random2D().setMag(random(this.MIN_SPEED, this.MAX_SPEED));
         this.acceleration = createVector(0, 0);
 
         this.MIN_HEALTH = color(255, 0, 0);
@@ -14,9 +18,12 @@ class Vehicle {
     }
 
     update() {
-        this.velocity.add(this.acceleration);
-        this.position.add(this.velocity);
-        this.acceleration.mult(0);
+        this.health -= 0.0001;
+        if (!this.dead){
+            this.velocity.add(this.acceleration);
+            this.position.add(this.velocity);
+            this.acceleration.mult(0);
+        }
     }
 
     applyForce(force){
@@ -70,13 +77,17 @@ class Vehicle {
         this.applyForce(steer);
     }
 
+    updateMaxSpeed(){
+        this.maxSpeed = map(this.health, 0, 1, 2, 5);
+    }
+
     eat(food){
         this.health += food.nutrition;
         this.health = min(this.health, 1);
-        console.log(this.health);
+        this.updateMaxSpeed();
         if (this.health <= 0){
-            noLoop();
             console.log("DEAD");
+            this.dead = true;
         }
     }
 
@@ -89,7 +100,7 @@ class Vehicle {
         if (debuggingElements.showVehicleVelocity.checked()){
             stroke('#CD5C5C');
             strokeWeight(2);
-            line(10, 0, 10+map(this.velocity.mag(), 0, this.maxSpeed, 0, 50), 0);
+            line(10, 0, 10+map(this.velocity.mag(), this.MIN_SPEED, this.MAX_SPEED, 0, 50), 0);
         }
         
         noStroke();
