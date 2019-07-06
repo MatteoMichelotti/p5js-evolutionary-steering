@@ -3,11 +3,14 @@ class Vehicle {
         this.maxSpeed = 5;
         this.maxSteerForce = 0.5;
 
-        this.health = 255;
+        this.health = 1;
 
         this.position = createVector(x, y);
         this.velocity = p5.Vector.random2D().setMag(random(this.maxSpeed));
         this.acceleration = createVector(0, 0);
+
+        this.MIN_HEALTH = color(255, 0, 0);
+        this.MAX_HEALTH = color(0, 255, 0);
     }
 
     update() {
@@ -55,7 +58,7 @@ class Vehicle {
 
     seek(target){
         if (!target) return;
-        
+
         const desired = p5.Vector.sub(target.position, this.position);
         
         desired.mag() < target.radius
@@ -65,6 +68,16 @@ class Vehicle {
         const steer = p5.Vector.sub(desired, this.velocity).limit(this.maxSteerForce);
 
         this.applyForce(steer);
+    }
+
+    eat(food){
+        this.health += food.nutrition;
+        this.health = min(this.health, 1);
+        console.log(this.health);
+        if (this.health <= 0){
+            noLoop();
+            console.log("DEAD");
+        }
     }
 
     display() {
@@ -79,8 +92,8 @@ class Vehicle {
             line(10, 0, 10+map(this.velocity.mag(), 0, this.maxSpeed, 0, 50), 0);
         }
         
-        noStroke()
-        fill(50, this.health, 0);
+        noStroke();
+        fill(lerpColor(this.MIN_HEALTH, this.MAX_HEALTH, this.health));
         triangle(10, 0, -8, 5, -8, -5);
 
         pop();

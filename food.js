@@ -14,7 +14,7 @@ class Food {
         this.food.push(new FoodItem());
     }
 
-    eat(index){
+    replaceFood(index){
         this.food.splice(index, 1);
         this.addFood();
     }
@@ -67,10 +67,14 @@ class FoodItem {
             random(width),
             random(height)
         );
+
+        this.bad = { color: color(255, 0, 0), value: -0.2 };
+        this.good = { color: color(0, 255, 0), value: 0.2 };
+        this.nutrition = random(this.bad.value, this.good.value);
     }
 
     display(){
-        fill(0, 255, 0);
+        fill(lerpColor(this.bad.color, this.good.color, map(this.nutrition, this.bad.value, this.good.value, 0, 1)));
         noStroke();
         ellipse(this.position.x, this.position.y, 3, 3);
     }

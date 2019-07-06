@@ -36,7 +36,8 @@ function draw(){
         const closestFood = food.findClosestTo(v);
         v.seek(closestFood.item);
         if (closestFood.distance < eat_distance){
-            food.eat(closestFood.idx);
+            v.eat(closestFood.item);
+            food.replaceFood(closestFood.idx);
         }
 
         v.update();
