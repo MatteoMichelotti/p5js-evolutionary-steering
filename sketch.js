@@ -1,5 +1,5 @@
 const vehicles = [];
-const vehicles_number = 20;
+const vehicles_number = 1;
 
 const debuggingElements = { };
 
@@ -17,6 +17,9 @@ function setup(){
 
 function draw(){    
     background(51);
+
+    const target = new Target(mouseX, mouseY, 50);
+    target.draw();
     
     if (debuggingElements.showOuterEdge.checked()) {
         const edge = debuggingElements.outerEdgeWidth.value();
@@ -27,6 +30,7 @@ function draw(){
     }
 
     vehicles.forEach(v => {
+        v.seek(target);
         v.update();
         v.avoidEdge();
         v.display();

@@ -1,7 +1,7 @@
 class Vehicle {
     constructor(x, y){
         this.maxSpeed = 5;
-        this.maxSteerForce = random(0.3, 0.6);
+        this.maxSteerForce = 0.2;
 
         this.health = 255;
 
@@ -27,7 +27,7 @@ class Vehicle {
 
     avoidEdge(){
         const edge = debuggingElements.outerEdgeWidth.value();
-        var desired = null;
+        let desired = null;
 
         if (this.position.x < edge){
             desired = createVector(this.maxSpeed, this.velocity.y);
@@ -47,11 +47,23 @@ class Vehicle {
 
         if (desired !== null){
             desired.setMag(this.maxSpeed);
-            var steer = p5.Vector.sub(desired, this.velocity);
-            steer.limit(this.maxSteerForce);
+            const steer = p5.Vector.sub(desired, this.velocity);
+            steer.limit(this.maxSteerForce*3);
             this.applyForce(steer);
         }
     };
+
+    seek(target){
+        const desired = p5.Vector.sub(target.position, this.position);
+        
+        desired.mag() < target.radius
+            ? desired.setMag(map(desired.mag(), 0, target.radius, 0, this.maxSpeed))
+            : desired.setMag(this.maxSpeed);
+
+        const steer = p5.Vector.sub(desired, this.velocity).limit(this.maxSteerForce);
+
+        this.applyForce(steer);
+    }
 
     display() {
         
@@ -62,7 +74,7 @@ class Vehicle {
         if (debuggingElements.showVehicleVelocity.checked()){
             stroke('#CD5C5C');
             strokeWeight(2);
-            line(10, 0, 10+map(this.velocity.mag(), 0, sqrt(2)*this.maxSpeed, 0, 50), 0);
+            line(10, 0, 10+map(this.velocity.mag(), 0, this.maxSpeed, 0, 50), 0);
         }
         
         noStroke()
