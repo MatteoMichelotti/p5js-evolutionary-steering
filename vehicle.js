@@ -1,7 +1,7 @@
 class Vehicle {
     constructor(x, y){
         this.maxSpeed = 5;
-        this.maxSteerForce = 0.2;
+        this.maxSteerForce = 0.5;
 
         this.health = 255;
 
@@ -48,7 +48,7 @@ class Vehicle {
         if (desired !== null){
             desired.setMag(this.maxSpeed);
             const steer = p5.Vector.sub(desired, this.velocity);
-            steer.limit(this.maxSteerForce*3);
+            steer.limit(this.maxSteerForce);
             this.applyForce(steer);
         }
     };
