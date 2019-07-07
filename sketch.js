@@ -1,8 +1,8 @@
 const vehicles = [];
-const vehicles_number = 1;
+const vehicles_number = 10;
 
 let food = null;
-const food_number = 50;
+const food_number = 100;
 const eat_distance = 5;
 
 const debuggingElements = { };
@@ -11,6 +11,7 @@ function setup(){
     createCanvas(1200, 600);
 
     debuggingElements.showVehicleVelocity = createCheckbox("Show vehicle velocity", true);
+    debuggingElements.showVehicleHealth = createCheckbox("Show vehicle health", true);
     debuggingElements.showOuterEdge = createCheckbox("Show outer edge", true);
     debuggingElements.outerEdgeWidth = createSlider(20, 100, 40);
     debuggingElements.showVisionRadius = createCheckbox("Show vehicle vision area", true);

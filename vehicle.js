@@ -20,9 +20,9 @@ class Vehicle {
     }
 
     update() {
-        this.health -= 0.0001;
-        if (!this.dead){
-            this.velocity.add(this.acceleration);
+        if (!this.dead) {
+            this.health -= 0.001;
+            this.velocity.add(this.acceleration).limit(this.maxDesiredSpeed);
             this.position.add(this.velocity);
             this.acceleration.mult(0);
         }
@@ -86,6 +86,7 @@ class Vehicle {
     eat(food){
         this.health += food.nutrition;
         this.health = min(this.health, 1);
+        this.health = max(this.health, 0);
         this.updateMaxSpeed();
         if (this.health <= 0){
             this.dead = true;
@@ -98,21 +99,31 @@ class Vehicle {
         translate(this.position.x, this.position.y);
         rotate(this.velocity.heading());
 
-        if (debuggingElements.showVehicleVelocity.checked()){
-            stroke('#CD5C5C');
-            strokeWeight(2);
-            line(10, 0, 10+map(this.velocity.mag(), this.MIN_SPEED, this.MAX_SPEED, 0, 50), 0);
+        if (debuggingElements.showVisionRadius.checked()) {
+            noStroke();
+            fill(255, 30);
+            ellipse(0, 0, this.visionRadius * 2, this.visionRadius * 2);
         }
 
-        if (debuggingElements.showVisionRadius.checked()){
-            noStroke();
-            fill(255,30);
-            ellipse(0, 0, this.visionRadius*2, this.visionRadius*2);
+        if (debuggingElements.showVehicleVelocity.checked()){
+            stroke('#EEE');
+            fill('#EEE');
+            line(10, 0, 60, 0);
+            triangle(60, 0, 53, 2, 53, -2);
         }
         
         noStroke();
-        fill(lerpColor(this.MIN_HEALTH, this.MAX_HEALTH, this.health));
+        fill(255, 150);
         triangle(10, 0, -8, 5, -8, -5);
+
+        if (debuggingElements.showVehicleHealth.checked()) {
+            rotate(-this.velocity.heading());
+            noStroke();
+            fill("#EEE");
+            rect(-12, 12, map(this.health, 0, 1, 0, 24), 3);
+            stroke("#EEE");
+            line(-12, 15, 12, 15);
+        }
 
         pop();
     }
