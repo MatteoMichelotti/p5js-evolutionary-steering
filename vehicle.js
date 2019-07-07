@@ -1,13 +1,15 @@
 class Vehicle {
     constructor(x, y){
-        this.MIN_SPEED = 0.5;
-        this.MAX_SPEED = 5;
+        this.MIN_SPEED = 1;
+        this.MAX_SPEED = 3;
 
-        this.maxSpeed = 5;
-        this.maxSteerForce = 0.5;
+        this.maxDesiredSpeed = this.MAX_SPEED;
+        this.maxSteerForce = 0.25;
 
         this.health = 1;
         this.dead = false;
+
+        this.visionRadius = 60;
 
         this.position = createVector(x, y);
         this.velocity = p5.Vector.random2D().setMag(random(this.MIN_SPEED, this.MAX_SPEED));
@@ -40,23 +42,23 @@ class Vehicle {
         let desired = null;
 
         if (this.position.x < edge){
-            desired = createVector(this.maxSpeed, this.velocity.y);
+            desired = createVector(this.maxDesiredSpeed, this.velocity.y);
         }
 
         if (this.position.x > width-edge){
-            desired = createVector(-this.maxSpeed, this.velocity.y);
+            desired = createVector(-this.maxDesiredSpeed, this.velocity.y);
         }
 
         if (this.position.y < edge){
-            desired = createVector(this.velocity.x, this.maxSpeed);
+            desired = createVector(this.velocity.x, this.maxDesiredSpeed);
         }
 
         if (this.position.y > height-edge){
-            desired = createVector(this.velocity.x, -this.maxSpeed);
+            desired = createVector(this.velocity.x, -this.maxDesiredSpeed);
         }
 
         if (desired !== null){
-            desired.setMag(this.maxSpeed);
+            desired.setMag(this.maxDesiredSpeed);
             const steer = p5.Vector.sub(desired, this.velocity);
             steer.limit(this.maxSteerForce);
             this.applyForce(steer);
@@ -69,8 +71,8 @@ class Vehicle {
         const desired = p5.Vector.sub(target.position, this.position);
         
         desired.mag() < target.radius
-            ? desired.setMag(map(desired.mag(), 0, target.radius, 0, this.maxSpeed))
-            : desired.setMag(this.maxSpeed);
+            ? desired.setMag(map(desired.mag(), 0, target.radius, 0, this.maxDesiredSpeed))
+            : desired.setMag(this.maxDesiredSpeed);
 
         const steer = p5.Vector.sub(desired, this.velocity).limit(this.maxSteerForce);
 
@@ -78,7 +80,7 @@ class Vehicle {
     }
 
     updateMaxSpeed(){
-        this.maxSpeed = map(this.health, 0, 1, 2, 5);
+        this.maxDesiredSpeed = map(this.health, 0, 1, this.MIN_SPEED, this.MAX_SPEED);
     }
 
     eat(food){
@@ -86,7 +88,6 @@ class Vehicle {
         this.health = min(this.health, 1);
         this.updateMaxSpeed();
         if (this.health <= 0){
-            console.log("DEAD");
             this.dead = true;
         }
     }
@@ -101,6 +102,12 @@ class Vehicle {
             stroke('#CD5C5C');
             strokeWeight(2);
             line(10, 0, 10+map(this.velocity.mag(), this.MIN_SPEED, this.MAX_SPEED, 0, 50), 0);
+        }
+
+        if (debuggingElements.showVisionRadius.checked()){
+            noStroke();
+            fill(255,30);
+            ellipse(0, 0, this.visionRadius*2, this.visionRadius*2);
         }
         
         noStroke();

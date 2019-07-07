@@ -1,5 +1,5 @@
 const vehicles = [];
-const vehicles_number = 10;
+const vehicles_number = 1;
 
 let food = null;
 const food_number = 50;
@@ -12,7 +12,8 @@ function setup(){
 
     debuggingElements.showVehicleVelocity = createCheckbox("Show vehicle velocity", true);
     debuggingElements.showOuterEdge = createCheckbox("Show outer edge", true);
-    debuggingElements.outerEdgeWidth = createSlider(20, 100, 40)
+    debuggingElements.outerEdgeWidth = createSlider(20, 100, 40);
+    debuggingElements.showVisionRadius = createCheckbox("Show vehicle vision area", true);
 
     for (let i=0; i<vehicles_number; i++){
         vehicles.push(new Vehicle(random(width), random(height)));

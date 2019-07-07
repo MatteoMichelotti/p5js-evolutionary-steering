@@ -19,12 +19,12 @@ class Food {
         this.addFood();
     }
 
-    findClosestTo(target){
+    findClosestTo(vehicle){
         let closestIdx = -1;
         let closest = Infinity;
         this.food.forEach((item, idx) => {
-            const d = item.position.dist(target.position);
-            if (d < closest){
+            const d = item.position.dist(vehicle.position);
+            if (d <= vehicle.visionRadius && d < closest){
                 closest = d;
                 closestIdx = idx;
             }
